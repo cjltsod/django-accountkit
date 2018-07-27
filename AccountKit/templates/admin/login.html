@@ -1,0 +1,101 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+{% load accountkit %}
+
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}"/>
+    {{ form.media }}
+    <style>
+        .login .form-row #phone_number, .login .form-row #country_code {
+            clear: both;
+            padding: 8px;
+            width: 48%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .login .form-row #email {
+            clear: both;
+            padding: 8px;
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+    </style>
+    {% accountkitheadjs %}
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+
+{% block usertools %}{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+    {% if form.errors and not form.non_field_errors %}
+        <p class="errornote">
+            {% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}
+                {% trans "Please correct the errors below." %}{% endif %}
+        </p>
+    {% endif %}
+
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <p class="errornote">
+                {{ error }}
+            </p>
+        {% endfor %}
+    {% endif %}
+
+    <div id="content-main">
+
+        {% if user.is_authenticated %}
+            <p class="errornote">
+                {% blocktrans trimmed %}
+                    You are authenticated as {{ username }}, but are not authorized to
+                    access this page. Would you like to login to a different account?
+                {% endblocktrans %}
+            </p>
+        {% endif %}
+
+        <div class="form-row">
+            <label class="required" for="phone_number">{% trans 'Login via SMS' %}：</label><br>
+            <input type="text" value="+1" id="country_code" disabled>
+            <input type="text" placeholder="Phone number" id="phone_number"/>
+        </div>
+        <div class="submit-row">
+            <label>&nbsp;</label><input type="submit" value="{% trans 'Login via SMS' %}" onclick="smsLogin();"/>
+        </div>
+        <div class="form-row">
+
+        </div>
+        <div class="form-row">
+            <label class="required" for="phone_number">{% trans 'Login via Email' %}：</label><br>
+            <input type="email" placeholder="E-mail" id="email"/>
+        </div>
+        {% url 'admin_password_reset' as password_reset_url %}
+        {% if password_reset_url %}
+            <div class="password-reset-link">
+                <a href="{{ password_reset_url }}">{% trans 'Forgotten your password or username?' %}</a>
+            </div>
+        {% endif %}
+        <div class="submit-row">
+            <label>&nbsp;</label><input type="submit" value="{% trans 'Login via Email' %}" onclick="emailLogin();"/>
+        </div>
+
+        <form method="POST" action="{% url 'accountkit_success' %}" id="login">
+            {% csrf_token %}
+            <input type="hidden" name="code" id="code">
+            <input type="hidden" name="state" id="state">
+            <input type="hidden" name="status" id="status">
+            <input type="hidden" name="next" id="next" value="{{ request.GET.next }}">
+        </form>
+    </div>
+    {% accountkitbodyjs %}
+{% endblock %}
