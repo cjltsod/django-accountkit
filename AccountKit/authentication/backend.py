@@ -9,6 +9,7 @@ class AccountKitAuthenticationBackend:
         email_prefix = getattr(settings, 'ACCOUNT_KIT_EMAILASUSERNAME_PREFIX', 'fbak_email_')
         email_postfix = getattr(settings, 'ACCOUNT_KIT_EMAILASUSERNAME_POSTFIX', '')
         chk_email_with_username = getattr(settings, 'ACCOUNT_KIT_EMAILASUSERNAME', False)
+        auto_create = getattr(settings, 'ACCOUNT_KIT_AUTOCREATE', False)
         try:
             if phone:
                 user = User.objects.get(username='{}{}{}'.format(phone_prefix, phone, phone_postfix))
@@ -20,7 +21,7 @@ class AccountKitAuthenticationBackend:
             else:
                 user = None
         except User.DoesNotExist:
-            if getattr(settings, 'ACCOUNT_KIT_AUTOCREATE'):
+            if auto_create:
                 if phone:
                     user = User(username='{}{}{}'.format(phone_prefix, phone, phone_postfix))
                 elif email:

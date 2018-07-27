@@ -46,6 +46,7 @@ The following settings you can set in your `settings.py` are optional
     ACCOUNT_KIT_EMAILASUSERNAME_PREFIX = 'fbak_email_'
     ACCOUNT_KIT_EMAILASUSERNAME_POSTFIX = ''
     ACCOUNT_KIT_EMAILASUSERNAME = False
+    ACCOUNT_KIT_AUTOCREATE = False
 
 - **ACCOUNT_KIT_LANGUAGE_CODE** : Set the display language. For more supported language code, visit https://developers.facebook.com/docs/accountkit/languages for more information.
 - **ACCOUNT_KIT_SUCCESS_REDIRECT** : The url where handle success after authenticated by AcoountKit.
@@ -54,6 +55,7 @@ The following settings you can set in your `settings.py` are optional
 - **ACCOUNT_KIT_EMAILASUSERNAME_PREFIX** : Prefix of username when using email as username. Only valid when `ACCOUNT_KIT_EMAILASUSERNAME` set to `True`
 - **ACCOUNT_KIT_EMAILASUSERNAME_POSTIX** : Postfix of username when using email as username. Only valid when `ACCOUNT_KIT_EMAILASUSERNAME` set to `True`
 - **ACCOUNT_KIT_EMAILASUSERNAME** : Set to `True` if checking username when log in via e-mail, otherwise check e-mail instead.
+- **ACCOUNT_KIT_AUTOCREATE** : Create user if user not exist.
 
 ## Template Tags
 
